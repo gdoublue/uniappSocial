@@ -1,5 +1,7 @@
 <template>
-	<text v-if="text" :class="inverted ? 'uni-badge--' + type + ' uni-badge--' + size + ' uni-badge--' + type + '-inverted' : 'uni-badge--' + type + ' uni-badge--' + size" :style="badgeStyle" class="uni-badge" @click="onClick()">{{ text }}</text>
+	<view v-show="show" :class="inverted ? 'uni-badge--' + type + ' uni-badge--' + size + ' uni-badge--' + type + '-inverted' : 'uni-badge--' + type + ' uni-badge--' + size" 
+	:style="badgeStyle" class="uni-badge" @click="onClick()">
+		<slot></slot><text> {{ text }}</text></view>
 </template>
 
 <script>
@@ -8,12 +10,13 @@
 	 * @description 数字角标一般和其它控件（列表、9宫格等）配合使用，用于进行数量提示，默认为实心灰色背景
 	 * @tutorial https://ext.dcloud.net.cn/plugin?id=21
 	 * @property {String} text 角标内容
-	 * @property {String} type = [default|primary|success|warning|error] 颜色类型
+	 * @property {String} type = [default|primary|success|warning|error|pink] 颜色类型
 	 * 	@value default 灰色
 	 * 	@value primary 蓝色
 	 * 	@value success 绿色
 	 * 	@value warning 黄色
 	 * 	@value error 红色
+	 * 	@value pink 粉色
 	 * @property {String} size = [normal|small] Badge 大小
 	 * 	@value normal 一般尺寸
 	 * 	@value small 小尺寸
@@ -43,7 +46,9 @@
 		},
 		data() {
 			return {
-				badgeStyle: ''
+				badgeStyle: "width: 12px",
+				exWidth:0,
+				show:false
 			};
 		},
 		watch: {
@@ -54,9 +59,24 @@
 		mounted() {
 			this.setStyle()
 		},
+		created() {
+	
+		},
 		methods: {
 			setStyle() {
-				this.badgeStyle = `width: ${String(this.text).length * 8 + 12}px`
+				
+				const query = uni.createSelectorQuery().in(this).select('#slot');
+				query.fields({
+				  size: true
+				}, data => {
+				 if(data){
+					 this.exWidth = data.width
+				 }
+				  this.badgeStyle = `width: ${String(this.text).length * 8 +12  + this.exWidth }px`
+				  this.show = true
+				}).exec();
+				
+				
 			},
 			onClick() {
 				this.$emit('click');
@@ -104,6 +124,10 @@
 	.uni-badge--primary {
 		color: #fff;
 		background-color: #007aff;
+	}
+	.uni-badge--pink {
+		color: #fff;
+		background-color: #FF4A6A;
 	}
 
 	.uni-badge--primary-inverted {

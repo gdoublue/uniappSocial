@@ -138,7 +138,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
+      
 				"app-plus":{
 					"titleNView":{
 						"type":"transparent",
@@ -148,6 +148,74 @@
 							}
 						]
 					}
+				}
+            }
+            
+        }
+        ,{
+            "path" : "pages/friendsList/friendsList",
+            "style" :                                                                                    
+            {
+               
+                "enablePullDownRefresh": false,
+				"navigationBarBackgroundColor":"#FFFFFF",
+				"app-plus":{
+					"animationType":"slide-in-left",
+					
+					"titleNView":{
+						"autoBackButton":false,
+						"backgroundColor":"#FFFFFF",
+						"searchInput":{
+							"align":"left",
+							"backgroundColor":"#F5f4f2",
+							"borderRadius":"6rpx",
+							"placeholder":"搜索用户",
+							"disabled":true,
+							"placeholderColor":"#6d6c67"
+						},
+						"buttons":[
+							{
+								"color":"#333333",
+								"colorPressed":"#1296db",
+								"fontSize":"40rpx",
+								"float":"right",
+								"text":"取消",
+								"width":"auto"
+							}
+						]
+					}
+				}
+            }
+            
+        }
+        ,{
+            "path" : "pages/userSearch/userSearch",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/chart/chart",
+            "style" :                                                                                    
+            {
+                "navigationBarBackgroundColor":"#FFFFFF",
+                "enablePullDownRefresh": false,
+				"app-plus":{
+					 "titleNView": {
+						 "buttons":[
+						{
+							"color":"#333333",
+							"colorPressed":"#1296db",
+							"fontSize":"50rpx",
+							"float":"right",
+							"fontSrc":"/static/iconfont.ttf",
+							"text":"\ue628"
+						}
+						 ]
+					 }
 				}
             }
             

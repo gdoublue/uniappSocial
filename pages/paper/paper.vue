@@ -62,7 +62,7 @@
 	import topicList from '@/components/topicList/topicList.vue'
 	import {
 		list
-	} from "@/static/index_list.js";
+	} from "@/static/demolist.js";
 	export default {
 		components: {
 			List,

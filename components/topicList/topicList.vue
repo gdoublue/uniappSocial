@@ -15,6 +15,13 @@
 </template>
 
 <script>
+	/**
+		 *
+		 * @description 话题列表
+		 * @property {Object} item  话题对象
+		 * @property {Number} index  话题index
+		 
+		 */
 	export default {
 		props: {
 			item: Object,

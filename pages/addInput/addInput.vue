@@ -82,7 +82,7 @@
 				}
 			},
 			imagesChange(list){
-				console.log('图片改变');
+				
 				this.imageList = list
 			},
 			draftUp(){

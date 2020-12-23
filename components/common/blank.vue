@@ -1,7 +1,7 @@
 <template>
   <view
     class="flex flex-column align-center justify-center"
-    style="height: 100%"
+    style="height: 100%; "
   >
     <image
       src="@/static/common/nothing.png"

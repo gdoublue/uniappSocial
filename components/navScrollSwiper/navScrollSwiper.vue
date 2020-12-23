@@ -29,7 +29,7 @@
 		      :style="'height:' + scrollH + 'px;'"
 		      @scrolltolower="scrolltolower"
 		    >
-			<slot :name="item">{{item}}</slot>
+			<slot :name="index+1" ><Blank></Blank></slot>
 		   
 		    </scroll-view>
 		  </swiper-item>
@@ -42,7 +42,7 @@
 		props:{tabBars:Array},
 		data() {
 			return {
-				 scrollH: 600,
+				 scrollH: 800,
 				 tabIndex: 0,
 				 scrollInto: "",
 			};
@@ -63,6 +63,7 @@
 		  uni.getSystemInfo({
 		    success: (res) => {
 		      this.scrollH = res.windowHeight - uni.upx2px(101);
+			  console.log(this.scrollH);
 		    },
 		  })
 		}
