@@ -30,7 +30,8 @@
 		},
 		data() {
 			return {
-				list:[]
+				list:[],
+				showPopup:false,
 			}
 		},
 		onPullDownRefresh() {
@@ -52,7 +53,12 @@
 						this.$refs.popup.close()
 							break;
 						case 1: // 右边
-						this.$refs.popup.open()
+						if(this.$refs.popup.showPopup){
+							this.$refs.popup.close()
+						}else{
+							this.$refs.popup.open()
+						}
+						
 							break;
 					}
 				},
@@ -90,6 +96,20 @@
 							update_time: 1610718427,
 							data: "嗯嗯",
 							noread: 20
+						},
+						{
+							avatar: "/static/demo/userpic/17.jpg",
+							username: "lakers",
+							update_time: 1520718427,
+							data: "嗯嗯",
+							noread: 99
+						},
+						{
+							avatar: "/static/demo/userpic/11.jpg",
+							username: "兑积分",
+							update_time: 1610718427,
+							data: "嗯嗯",
+							noread: 200
 						}]
 				},0)
 				

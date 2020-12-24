@@ -204,6 +204,9 @@
                 "navigationBarBackgroundColor":"#FFFFFF",
                 "enablePullDownRefresh": false,
 				"app-plus":{
+					"bounce":"none",
+					"softinputNavBar": "none",
+					 "softinputMode": "adjustPan",
 					 "titleNView": {
 						 "buttons":[
 						{

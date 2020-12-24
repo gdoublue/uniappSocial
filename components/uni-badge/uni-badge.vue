@@ -64,16 +64,16 @@
 		},
 		methods: {
 			setStyle() {
-				
-				const query = uni.createSelectorQuery().in(this).select('#slot');
-				query.fields({
+				 this.show = true
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#slot').fields({
 				  size: true
 				}, data => {
 				 if(data){
 					 this.exWidth = data.width
 				 }
-				  this.badgeStyle = `width: ${String(this.text).length * 8 +12  + this.exWidth }px`
-				  this.show = true
+				  this.badgeStyle = `width: ${String(this.text).length * 8 + 12  + this.exWidth }px`
+				 
 				}).exec();
 				
 				
