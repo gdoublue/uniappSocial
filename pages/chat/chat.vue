@@ -1,31 +1,33 @@
 <template>
 	<view>
 		<!-- 背景图片 -->
-		<view id="bgImg" :style="'height:' + staticH + 'px !important;background-image: url(../../static/chart/chat4.jpg)'"
-		style="">
-			
+		<view  class="bgImg" style="750rpx"
+		:style="'height:' + staticH + 'px !important;'">
+			<image src="@/static/chat/chat4.jpg" style="width: 750rpx;height: 100%;"></image>
 		</view>
 		<!-- 聊天消息视图 -->
 
-		<scroll-view scroll-y="true" :style="translateClass" :scroll-into-view="scrollInto"
+		<scroll-view scroll-y="true" :style="'height:' + staticH + 'px'" :scroll-into-view="scrollInto"
 	
-		 class="scrollup pb-1" >
-				<!-- 上移占位,不然看不到第一条消息 -->
-				<view   :style="'height:'+ transHeight + 'px;'" >
-				</view>
+		 class="scrollup pb-0" >
+			
 				<view 	:class="mountedover?'ready':'noready'" style="opacity: 0;">
-					<template v-for="(item,index) in list">
-					<chatList :item="item" :index="index" :pretime="index > 0 ? list[index-1].create_time : 0"> </chatList>
-				</template>
-
+						<template v-for="(item,index) in list">
+						<chatList :item="item" :index="index" :pretime="index > 0 ? list[index-1].create_time : 0" > </chatList>
+					</template>
+				
+					
+					<view id="tobt">
+					
+					</view>
+					<view  id='bbttmm'>
+					<!-- 上移占位,不然看不到最后-条消息 -->
+					<view :style="'height:'+ transHeight+ 'px;'"  class="transtime" >
+					</view>
+					</view>
+				
 				</view>
-
-			<view id='bbttmm'>
-
-			</view>
-			<view id="tobt">
-
-			</view>
+			
 		</scroll-view>
 
 
@@ -45,7 +47,7 @@
 
 				</view>
 		<view class="bg-light position-fixed fixed-bottom transtime" :style="'height:' + transHeight + 'px;'">
-
+			
 		</view>
 
 		
@@ -54,6 +56,7 @@
 </template>
 
 <script>
+	import {demoChartList} from '../../static/chartlist.js'
 	import chatList from '@/components/chatList/chatList.vue'
 	import uniTransition from '@/components/uni-transition/uni-transition.vue'
 	export default {
@@ -66,7 +69,7 @@
 				scrollH: 600,
 				staticH: 600,
 				inputBottom: 0,
-				scrollInto: 'meiyou',
+				scrollInto: '',
 				modeclass: [],
 				transHeight: 0,
 				inputText: '',
@@ -78,7 +81,8 @@
 					data: "你好啊",
 					type: "text",
 					create_time: 1570783530
-				}]
+				}
+				]
 			}
 		},
 		computed: {
@@ -90,6 +94,7 @@
 
 			submit() {
 				if (!this.inputText.trim()) {
+					this.transHeight += 2
 					this.pageToBottom()
 					return
 				} else {
@@ -111,7 +116,10 @@
 
 			pageToBottom() {
 				this.scrollInto = "bbttmm"
-				setTimeout(() => this.scrollInto = "tobt", 100)
+
+				this.$nextTick(() => {
+					this.scrollInto = "tobt"
+				})
 			},
 			chooseImage() {
 				uni.chooseImage({
@@ -135,13 +143,10 @@
 			},
 		},
 		mounted() {
-		this.pageToBottom()
-		this.$nextTick(	()=>{
+
 		
+			this.pageToBottom()
 			this.mountedover = true
-		
-			
-		})
 		},
 		watch: {
 		
@@ -152,6 +157,7 @@
 			
 		},
 		onLoad(e) {
+			
 			uni.setNavigationBarTitle({
 					title: e.info
 				})
@@ -165,8 +171,15 @@
 				height
 			}) => {
 				this.transHeight = height
-				this.pageToBottom()
-
+				this.$nextTick(() => {
+					if(height> 0){
+						setTimeout(()=>{
+							this.pageToBottom()
+						},150)  /* 等待动画完成再滚到底部*/
+					}
+					
+				})
+				
 			})
 		
 				
@@ -182,7 +195,7 @@
 	}
 	.ready{
 		opacity: 1 !important;
-		transition: transform 0.1s;
+		transition: all 0.1s;
 	}
 	.scrollup {
 		transition: transform .15s;
@@ -194,9 +207,7 @@
 		transition: all .15s;
 	}
 
-	#bgImg {
-	/* 	background-image: url(../../static/chart/chart3.jpg); */
-		background-size: cover;
+	.bgImg {
 		position: absolute;
 		z-index: -1;
 		top: 0;
