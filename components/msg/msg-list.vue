@@ -41,9 +41,11 @@
 		},
 		methods:{
 			openMsg(){
-				uni.navigateTo({
-					url:'../../pages/chart/chart?info='+this.item.username
-				})
+			
+					uni.navigateTo({
+						url:'../../pages/chat/chat?info=' + this.item.username
+					})
+				
 			}
 		}
 	}

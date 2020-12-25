@@ -198,15 +198,17 @@
             
         }
         ,{
-            "path" : "pages/chart/chart",
-            "style" :                                                                                    
-            {
-                "navigationBarBackgroundColor":"#FFFFFF",
-                "enablePullDownRefresh": false,
+            "path" : "pages/chat/chat",
+			"style" :
+         {
+			 "navigationBarTitleText": "chat",
+             "navigationBarBackgroundColor":"#FFFFFF",
+             "enablePullDownRefresh": false,
 				"app-plus":{
 					"bounce":"none",
 					"softinputNavBar": "none",
 					 "softinputMode": "adjustPan",
+					 "animationType":"slide-in-right",
 					 "titleNView": {
 						 "buttons":[
 						{
@@ -219,8 +221,8 @@
 						}
 						 ]
 					 }
-				}
-            }
+         	}
+         }
             
         }
     ],
