@@ -1,7 +1,10 @@
 <template>
-	<view v-show="show" :class="inverted ? 'uni-badge--' + type + ' uni-badge--' + size + ' uni-badge--' + type + '-inverted' : 'uni-badge--' + type + ' uni-badge--' + size" 
+	<view  :class="inverted ? 'uni-badge--' + type + ' uni-badge--' + size + ' uni-badge--' + type + '-inverted' : 'uni-badge--' + type + ' uni-badge--' + size" 
 	:style="badgeStyle" class="uni-badge" @click="onClick()">
-		<slot></slot><text> {{ text }}</text></view>
+		<slot>
+			
+		</slot>
+		<text> {{ text }}</text></view>
 </template>
 
 <script>
@@ -10,6 +13,7 @@
 	 * @description 数字角标一般和其它控件（列表、9宫格等）配合使用，用于进行数量提示，默认为实心灰色背景
 	 * @tutorial https://ext.dcloud.net.cn/plugin?id=21
 	 * @property {String} text 角标内容
+	 * @property {Number} slotWidth 插槽宽度
 	 * @property {String} type = [default|primary|success|warning|error|pink] 颜色类型
 	 * 	@value default 灰色
 	 * 	@value primary 蓝色
@@ -42,45 +46,36 @@
 			size: {
 				type: String,
 				default: 'normal'
+			},
+			slotWidth:{
+				type:Number,
+				default:0
 			}
 		},
 		data() {
 			return {
-				badgeStyle: "width: 12px",
-				exWidth:0,
-				show:false
+			
 			};
-		},
-		watch: {
-			text() {
-				this.setStyle()
-			}
-		},
-		mounted() {
-			this.setStyle()
 		},
 		created() {
 	
 		},
+		onLoad() {
+			
+		},
+		computed:{
+			badgeStyle(){
+			
+					return `width: ${String(this.text).length * 8 +  this.slotWidth }px`
+				
+			}
+		},
 		methods: {
-			setStyle() {
-				 this.show = true
-				const query = uni.createSelectorQuery().in(this);
-				query.select('#slot').fields({
-				  size: true
-				}, data => {
-				 if(data){
-					 this.exWidth = data.width
-				 }
-				  this.badgeStyle = `width: ${String(this.text).length * 8 + 12  + this.exWidth }px`
-				 
-				}).exec();
-				
-				
-			},
+		
 			onClick() {
 				this.$emit('click');
-			}
+			},
+			
 		}
 	};
 </script>

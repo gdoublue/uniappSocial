@@ -75,8 +75,17 @@
             "path" : "pages/user/user",
             "style" :                                                                                    
             {
-             
-                "enablePullDownRefresh": false
+				"navigationBarTitleText":"我的",
+                "enablePullDownRefresh": false,
+				"app-plus":{
+					"titleNView":{
+						"buttons":[
+							{
+								"type":"menu"
+							}
+						]
+					}
+				}
             }
             
         }
@@ -193,7 +202,28 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": false,
+				"app-plus":{
+					"titleNView":{
+						"searchInput":{
+							"align":"center",
+							"backgroundColor":"#F5f4f2",
+							"borderRadius":"12rpx",
+							"placeholder":"搜索用户",
+							"placeholderColor":"#6d6c67"
+						},
+						"buttons":[
+							{
+								"color":"#333333",
+								"colorPressed":"#1296db",
+								"fontSize":"40rpx",
+								"float":"right",
+								"text":"搜索",
+								"width":"auto"
+							}
+						]
+					}
+				}
             }
             
         }
@@ -223,6 +253,71 @@
 					 }
          	}
          }
+            
+        }
+        ,{
+            "path" : "pages/searchTopic/searchTopic",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"app-plus":{
+					"titleNView":{
+						"searchInput":{
+							"align":"center",
+							"backgroundColor":"#F5f4f2",
+							"borderRadius":"12rpx",
+							"placeholder":"搜索话题",
+							"placeholderColor":"#6d6c67"
+						},
+						"buttons":[
+							{
+								"color":"#333333",
+								"colorPressed":"#1296db",
+								"fontSize":"40rpx",
+								"float":"right",
+								"text":"搜索",
+								"width":"auto"
+							}
+						]
+					}
+				}
+            }
+            
+        }
+        ,{
+            "path" : "pages/detail/detail",
+            "style" :                                                                                    
+            {
+                "enablePullDownRefresh": false	
+            }
+            
+        }
+        ,{
+            "path" : "pages/user-set/user-set",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "设置",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user-pwd/user-pwd",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "账号与安全",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user-info/user-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "修改资料",
+                "enablePullDownRefresh": false
+            }
             
         }
     ],

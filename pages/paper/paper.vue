@@ -22,15 +22,16 @@
 			<swiper-item>
 				<scroll-view scroll-y="true" 
 				:style="'height:' + scrollH + 'px;'">
+				<!-- 热门分类 -->
 					<hotTopicsClass></hotTopicsClass>
 					<!-- 搜索框 -->
-					<view class="p-2">
+					<view class="p-2" @click="tosearchTopic">
 						<view class="bg-light rounded flex align-center justify-center py-2 text-secondary">
 							<text class="iconfont icon-sousuo mr-2"></text>
 							搜索话题
 						</view>
 					</view>
-
+				
 					<!-- 轮播图 -->
 					<swiper class="px-2 pb-2" :indicator-dots="true" :autoplay="true" circular=true :interval="3000" :duration="1000">
 						<swiper-item>
@@ -161,6 +162,12 @@
 			this.getData();
 		},
 		methods: {
+			tosearchTopic(){
+				console.log('totopic');
+				uni.navigateTo({
+					url:'../searchTopic/searchTopic'
+				})
+			},
 			back() {
 				uni.navigateBack({
 					delta: 1

@@ -1,5 +1,5 @@
 <template>
-	<view class="p-2">
+	<view class="p-2" @click="openDetail">
 		<!-- 头像 昵称 关注 row -->
 			<view class="flex  align-center justify-between">
 				<view class="flex">
@@ -14,29 +14,29 @@
 				</view>
 				
 					<view style="width: 90rpx; height: 50rpx; "  v-if="!item.isFollow"
-					 @click="clickFollow"
+					 @click.stop="clickFollow"
 					 class="flex align-center justify-center rounded bg-main text-white animate__animated" 
 					 hover-class="animate__tada">关注</view>
 					 <view style="width: 90rpx; height: 50rpx; background-color: rgba(5,5,5,0.2); "  v-else
 					 class="flex align-center justify-center rounded text-white animate__animated " 
-					 @click="clickFollow"
+					 @click.stop="clickFollow"
 					 hover-class="animate__tada">已关注</view>
 					
 				
 			</view>
 			<view class="font-md my-2" >{{item.title}}</view>
 			<image v-if="item.titlepic" :src="item.titlepic" class="rounded w-100" style="height: 350rpx;" lazy-load=true
-			@tap="previewImage" mode="aspectFill"></image>
+			@tap.stop="previewImage" mode="aspectFill"></image>
 			
 			<!-- 点赞 评论 ... -->
 			<view class="flex align-center ">
 				<view class="flex-1 flex align-center justify-center">
 					<view class="iconfont mr-2  icon-dianzan2 animate__animated" hover-class="animate__jello"
-					 @click="doSupport('support')" :class="item.support.type === 'support' ? 'support-active' : ''"></view>
+					 @click.stop="doSupport('support')" :class="item.support.type === 'support' ? 'support-active' : ''"></view>
 					<text>{{item.support.support_count}}</text>
 				</view>
 				<view class="flex-1 flex align-center justify-center">
-					<view class="iconfont mr-2 icon-cai animate__animated" hover-class="animate__tada"  @click="doSupport('unsupport')"
+					<view class="iconfont mr-2 icon-cai animate__animated" hover-class="animate__tada"  @click.stop="doSupport('unsupport')"
 					:class="item.support.type === 'unsupport' ? 'support-active' : ''"></view>
 					<text>{{item.support.unsupport_count}}</text>
 				</view>
@@ -64,6 +64,11 @@
 			};
 		},
 		methods:{	
+			openDetail(){
+				uni.navigateTo({
+					url:'../../pages/detail/detail?info='+JSON.stringify(this.item)
+				})
+			},
 			doSupport(type){
 				this.$emit('doSupport',{
 					type:type,

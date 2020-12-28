@@ -93,8 +93,7 @@
 		methods: {
 
 			submit() {
-				if (!this.inputText.trim()) {
-					this.transHeight += 2
+				if (!this.inputText.trim()) {				
 					this.pageToBottom()
 					return
 				} else {

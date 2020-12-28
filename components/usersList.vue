@@ -3,11 +3,10 @@
 		<image :src="item.avatar" style="width: 100rpx; height: 100rpx;" class="rounded-circle mr-1"></image>
 		<view class="flex flex-1 flex-column ml-2">
 			<text class="font-md">{{item.name}}</text>
-			<uni-badge :text="item.age" v-if="item.sex===2" type="warning">
+			<uni-badge :text="item.age" v-if="item.sex===2" type="warning" :slotWidth="12">
 				<text id="slot" class=" font-sm iconfont icon-yiwen pr-1"></text>
-				
 			</uni-badge>
-			<uni-badge v-else :text="item.age" :type="item.sex===0?'pink':'primary'" >
+			<uni-badge v-else :text="item.age" :type="item.sex===0?'pink':'primary'" :slotWidth="12" >
 				<text class="iconfont  font-sm  pr-1" :class="item.sex=== 0 ? 'icon-nv':'icon-nan'" id='slot'></text>
 			</uni-badge>
 		</view>

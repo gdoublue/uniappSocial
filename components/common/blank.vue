@@ -1,13 +1,6 @@
 <template>
-  <view
-    class="flex flex-column align-center justify-center"
-    style="height: 100%; "
-  >
-    <image
-      src="@/static/common/nothing.png"
-      style="width: 300rpx; height: 300rpx"
-    ></image>
-    <text class="font-md">什么都没有</text>
+  <view class="nothing">
+    
   </view>
 </template>
 
@@ -15,4 +8,13 @@
 export default {};
 </script>
 
-<style></style>
+<style scoped>
+	.nothing{
+		background-image: url(../../static/common/not_found.png);
+		width: 750rpx;
+		height: 100%;
+		background-position: center;
+		background-size: 350rpx 350rpx;
+		background-repeat: no-repeat;
+	}
+</style>
