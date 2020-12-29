@@ -2,7 +2,7 @@
 	<view class="p-2" @click="openDetail">
 		<!-- 头像 昵称 关注 row -->
 			<view class="flex  align-center justify-between">
-				<view class="flex">
+				<view class="flex" @click.stop="goUserspace">
 					<image :src="item.userpic" mode="aspectFit"
 					 style="width: 65rpx; height: 65rpx;" class="rounded-circle mr-2" >
 					 </image>
@@ -64,6 +64,11 @@
 			};
 		},
 		methods:{	
+			goUserspace(){
+				uni.navigateTo({
+					url:"../../pages/user-space/user-space"
+				})
+			},
 			openDetail(){
 				uni.navigateTo({
 					url:'../../pages/detail/detail?info='+JSON.stringify(this.item)
