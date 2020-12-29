@@ -24,7 +24,8 @@
 						</view>
 						<view class="mb-2 flex align-stretch">
 							<input type="text" placeholder="请输入验证码" v-model="code" class="border-bottom p-2 flex-1"/>
-							<view class="border-bottom flex align-center justify-center font-sm text-white bg-main" style="width: 180rpx;">获取验证码</view>
+							<view class="border-bottom flex align-center justify-center font-sm text-white" style="width: 180rpx;" 
+							:class="countdown>0?'bg-main-disabled':'bg-main'" @click="getCode">{{countdown > 0 ? countdown + ' s' : '获取验证码'}}</view>
 						</view>
 					</template>
 					
@@ -45,32 +46,20 @@
 					<view class="text-primary font-sm">登录遇到问题</view>
 				</view>
 				
-				<view class="flex align-center justify-center">
-					<view style="height: 1rpx;background-color: #dddddd;width: 100rpx;"></view>
-					<view class="mx-2 text-muted">社交账号登录</view>
-					<view style="height: 1rpx;background-color: #dddddd;width: 100rpx;"></view>
-				</view>
+		
 				
-				<view class="flex align-center px-5 py-3">
-					<view class="flex-1 flex align-center justify-center">
-						<view class="iconfont icon-weixin font-lg text-white bg-success flex align-center justify-center rounded-circle" style="width: 100rpx;height: 100rpx;"></view>
-					</view>
-					<view class="flex-1 flex align-center justify-center">
-						<view class="iconfont icon-QQ font-lg text-white bg-primary flex align-center justify-center rounded-circle" style="width: 100rpx;height: 100rpx;"></view>
-					</view>
-					<view class="flex-1 flex align-center justify-center">
-						<view class="iconfont icon-xinlangweibo font-lg text-white bg-danger flex align-center justify-center rounded-circle" style="width: 100rpx;height: 100rpx;"></view>
-					</view>
-				</view>
-				
+				<otherLogin></otherLogin>
 				<view class="flex align-center justify-center text-muted">
 					注册即代表同意<text class="text-primary">《xxx社区协议》</text>
 				</view>
+			
 	</view>
 </template>
 
 <script>
+	import otherLogin from '@/components/common/other-login.vue';
 	export default {
+		components:{otherLogin},
 		data() {
 			return {
 				status:false,
@@ -78,6 +67,7 @@
 				password:'',
 				code:'',
 				phone:'',
+				countdown:0,
 				
 			}
 		},
@@ -88,15 +78,48 @@
 			// 切换登录方式
 			changeStatus(){
 				this.status = !this.status
+				if(this.verifyMobilePhone(this.username))
+				this.phone = this.username
+			},
+			verifyMobilePhone(e){
+				
+				const pattern = /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/;
+				return pattern.test(e)
+			},
+			//获取验证码
+			getCode(){
+				if(this.countdown > 0 ) return
+				if(!this.verifyMobilePhone(this.phone)){
+					uni.showToast({
+						title:"请输入正确地手机号!",
+						icon:"none"
+					})
+					return
+				}
+				console.log('发送验证码');
+				this.countdown = 30
+			 let  count =  setInterval(()=>{
+					if(this.countdown>=1){
+						this.countdown --
+					}else{
+						clearInterval(count)
+					}
+				},1000)
 			}
 		},
 		computed:{
 			disabled(){
-				if(this.username.trim()==='' || this.password.trim() ==="")
+				if(this.status){
+					if(this.verifyMobilePhone(this.phone) && this.code !== '')
+					return false
+				}else{
+					if(this.username.trim()!=='' && this.password.trim() !=="" )
+					return false
+				}
+				
 				return true
-				else
-				return false
 			}
+		
 		}
 	}
 </script>

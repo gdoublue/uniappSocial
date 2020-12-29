@@ -345,11 +345,13 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
 				"app-plus":{
+					"bounce":"none",
 					"titleNView":false
 				}
             }
             
         }
+        
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
