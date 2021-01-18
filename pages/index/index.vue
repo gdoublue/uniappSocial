@@ -14,7 +14,7 @@
         :id="'tab' + index"
         :class="tabIndex === index ? 'text-main font-lg font-weight-bold' : ''"
         @click="changeTab(index)"
-        >{{ item.name }}</view
+        >{{ item.classname }}</view
       >
     </scroll-view>
 
@@ -29,8 +29,8 @@
           :style="'height:' + scrollH + 'px;'"
           @scrolltolower="loadmore(index)"
         >
-          <template v-if="item.length > 0">
-            <template v-for="(item2, index2) in item">
+          <template v-if="item.list.length > 0">
+            <template v-for="(item2, index2) in item.list">
               <List
                 :key="index2"
                 :item="item2"
@@ -40,9 +40,13 @@
               ></List>
               <Divider></Divider>
             </template>
+				<uni-load-more :status="item.loadmore"></uni-load-more>
           </template>
           <template v-else>
-            <Blank></Blank>
+			  	<template v-if="!item.firstLoad">
+			  						<view class="text-light-muted flex align-center justify-center font-md" style="height: 200rpx;">加载中...</view>
+			  					</template>
+            <Blank v-else></Blank>
           </template>
         </scroll-view>
       </swiper-item>
@@ -63,26 +67,7 @@ export default {
       tabIndex: 0,
       scrollInto: "",
       newsList: [],
-      tabBars: [
-        {
-          name: "关注",
-        },
-        {
-          name: "推荐",
-        },
-        {
-          name: "体育",
-        },
-        {
-          name: "热点",
-        },
-        {
-          name: "财经",
-        },
-        {
-          name: "娱乐",
-        },
-      ],
+      tabBars: []
     };
   },
   onNavigationBarSearchInputClicked() {
@@ -101,32 +86,85 @@ export default {
         this.scrollH = res.windowHeight - uni.upx2px(101);
       },
     });
-    this.getData();
+    this.getData(); 	
   },
   methods: {
-    getData() {
-      for (let i = 0; i < this.tabBars.length; i++) {
-        if (i < 3) {
-          this.newsList.push(list);
-        } else {
-          this.newsList.push([]);
-        }
-      }
-    },
+	// 获取数据
+			getData(){
+				// 获取分类
+				this.$H.get('/postclass').then(res=>{
+					
+					this.tabBars = res.list
+					// 根据分类生成列表
+					var arr = []
+					for (let i = 0; i < this.tabBars.length; i++) {
+						// 生成列表模板
+						arr.push({ 	
+							// 1.more  2.loading... 3.noMore
+							loadmore:"more",
+							list:[],
+							page:1,
+							firstLoad:false
+						})
+					}
+					this.newsList = arr
+					// 获取第一个分类的数据
+					if (this.tabBars.length) {
+						this.getList()
+					}
+				})
+	},
     loadmore(index) {
-      if (this.newsList[index].length < 15) {
-        setTimeout(() => {
-          this.newsList[index].push(...list);
-        }, 2000);
-      }
+	
+						// 拿到当前列表
+						let item = this.newsList[index]
+						
+						// 判断是否处于可加载状态（上拉加载更多）
+						if (item.loadmore !== 'more') return;
+						// 修改当前列表加载状态
+						item.loadmore = 'loading'
+						// 请求数据
+						item.page++;
+						this.getList()
+			
     },
+	getList(){
+						let index = this.tabIndex
+						let id = this.tabBars[index].id
+						let page = this.newsList[index].page
+						let isrefresh = page === 1
+						this.$H.get('/postclass/'+id+'/post/'+page)
+						.then(res=>{
+							let list = res.list.map(v=>{
+								return this.$U.formatCommonList(v)
+							})
+							this.newsList[index].loadmore  = list.length < 10 ? 'noMore' : 'more';
+							this.newsList[index].list = isrefresh ? list : [...this.newsList[index].list,...list];
+							
+							
+							
+							if (isrefresh) {
+								this.newsList[index].firstLoad = true
+							}
+						}).catch(err=>{
+							if(!isrefresh){
+								this.newsList[index].page --
+							}
+						})
+	},
     // 监听滑动
     onChangeTab(e) {
       this.changeTab(e.detail.current);
     },
     changeTab(index) {
+			if (this.tabIndex === index) {
+							return;
+						}
       this.scrollInto = "tab" + index;
       this.tabIndex = index;
+	  	if (!this.newsList[this.tabIndex].firstLoad) {
+	  					this.getList()
+	  				}
     },
     doSupport({type,index}) {
 	   const list = this.newsList[this.tabIndex]

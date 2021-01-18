@@ -10,7 +10,7 @@
 		</view>
 		<view class="flex ">
 			<text class="border rounded font bg-light mx-1 px-1 flex-nowrap font text-dark" v-for="item in hotTopics">
-				{{item}}
+				{{item.name}}
 			</text>
 		</view>
 	</view>
@@ -18,9 +18,12 @@
 
 <script>
 	export default {
+		props:{
+			hotTopics:Array
+		},
 		data() {
 			return {
-				hotTopics:['体育','财经','学习','节日']
+			
 			};
 		},
 		methods:{

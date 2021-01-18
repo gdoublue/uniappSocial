@@ -9,7 +9,7 @@
 					 <view class="flex-column ">
 						 <view style=" line-height: 1.5;" class="font ">{{item.username}}</view>
 						 <view style=" line-height: 1.5;"
-						  class="font-sm text-light-muted">{{item.newstime}}</view>
+						  class="font-sm text-light-muted">{{item.newstime|formatTime}}</view>
 					 </view>
 				</view>
 				
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+	import $T from '@/common/time.js';
 	export default {
 		props: {
 			item: Object,
@@ -63,6 +64,11 @@
 				
 			};
 		},
+		filters: {
+			formatTime(value) {
+				return $T.gettime(value);
+			}
+		},
 		methods:{	
 			goUserspace(){
 				uni.navigateTo({
@@ -71,7 +77,7 @@
 			},
 			openDetail(){
 				uni.navigateTo({
-					url:'../../pages/detail/detail?info='+JSON.stringify(this.item)
+					url:'../../pages/detail/detail?info='+JSON.stringify({id:this.item.id ,title:this.item.title})
 				})
 			},
 			doSupport(type){

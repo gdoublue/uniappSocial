@@ -1,18 +1,18 @@
 <template>
-	<view v-if="show" class="p-2">
+	<view v-if="show" class="p-2" style="padding-bottom: 102rpx;">
 		<view class="flex  align-center justify-between">
 			<view class="flex">
-				<image :src="item.userpic" mode="aspectFit"
+				<image :src="info.userpic" mode="aspectFit"
 				 style="width: 65rpx; height: 65rpx;" class="rounded-circle mr-2" >
 				 </image>
 				 <view class="flex-column ">
-					 <view style=" line-height: 1.5;" class="font ">{{item.username}}</view>
+					 <view style=" line-height: 1.5;" class="font ">{{info.username}}</view>
 					 <view style=" line-height: 1.5;"
-					  class="font-sm text-light-muted">{{item.newstime}}</view>
+					  class="font-sm text-light-muted">{{info.newstime|formatTime}}</view>
 				 </view>
 			</view>
 			
-				<view style="width: 90rpx; height: 50rpx; "  v-if="!item.isFollow"
+				<view style="width: 90rpx; height: 50rpx; "  v-if="!info.isFollow"
 				 @click.stop="clickFollow"
 				 class="flex align-center justify-center rounded bg-main text-white animate__animated" 
 				 hover-class="animate__tada">关注</view>
@@ -23,29 +23,29 @@
 				
 			
 		</view>
-		<view class="font-md my-2 " >{{item.title}}</view>
-		<image v-if="item.titlepic" :src="item.titlepic" class="rounded w-100" style="height: 350rpx;" lazy-load=true
-		@tap.stop="previewImage" mode="aspectFill"></image>
-		
+		<view class="font-md text-center font-weight-bolder" >{{info.title}}</view>
+		<view>{{info.content}}</view>
+		<image v-for="(item,index) in images" :src="item.url" class="rounded w-100"
+		@tap.stop="previewImage(index)" mode="aspectFill"></image>
 		<!-- 点赞 评论 ... -->
 		<view class="flex align-center ">
 			<view class="flex-1 flex align-center justify-center"  @click.stop="doSupport('support')">
 				<view class="iconfont mr-2  icon-dianzan2 animate__animated" hover-class="animate__jello"
-				 :class="item.support.type === 'support' ? 'support-active' : ''"></view>
-				<text>{{item.support.support_count}}</text>
+				 :class="info.support.type === 'support' ? 'support-active' : ''"></view>
+				<text>{{info.support.support_count}}</text>
 			</view>
 			<view class="flex-1 flex align-center justify-center"  @click.stop="doSupport('unsupport')">
 				<view class="iconfont mr-2 icon-cai animate__animated" hover-class="animate__tada" 
-				:class="item.support.type === 'unsupport' ? 'support-active' : ''"></view>
-				<text>{{item.support.unsupport_count}}</text>
+				:class="info.support.type === 'unsupport' ? 'support-active' : ''"></view>
+				<text>{{info.support.unsupport_count}}</text>
 			</view>
 			<view class="flex-1 flex align-center justify-center">
 				<view class="iconfont mr-2 icon-pinglun2 animate__animated animate__fast" hover-class="animate__tada"></view>
-				<text>{{item.comment_count}}</text>
+				<text>{{info.comment_count}}</text>
 			</view>
 			<view class="flex-1 flex align-center justify-center"  @click.stop="doShare">
 				<view class="iconfont mr-2 icon-fenxiang animate__animated animate__fast" hover-class="animate__tada" ></view>
-				<text>{{item.share_num}}</text>
+				<text>{{info.share_num}}</text>
 			</view>
 		</view>
 		
@@ -64,14 +64,45 @@
 	import bottomInput from '@/components/common/bottom-input.vue'
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import uniPopupShare from '@/components/uni-popup-share/uni-popup-share.vue' 
+	import $T from '@/common/time.js';
 	export default {
 		components:{bottomInput,uniPopupShare,uniPopup},
 		data() {
 			return {
-				item:[],
+								// 当前帖子信息
+								info:{
+									id:0,
+									user_id:0,
+									username:"loading",
+									userpic:"",
+									newstime:0,
+									isFollow:false,
+									title:"",
+									titlepic:"",
+									support:{
+										type:"support", // 顶
+										support_count:0,
+										unsupport_count:0
+									},
+									comment_count:0,
+									share_num:0,
+									content:""
+								},
+								images:[],
+								comments:[],
 				show:false
 			}
 		},
+		filters: {
+			formatTime(value) {
+				return $T.gettime(value);
+			}
+		},
+			computed: {
+					imagesList() {
+						return this.images.map(item=>item.url) 
+					}
+				},
 		methods: {
 			shareTo(e,done){
 				uni.showToast({
@@ -86,12 +117,21 @@
 			},
 			
 			init(){
-				this.getInfo().then((res)=>{
-					console.log(res);
-					this.item = res
+		// 请求api
+				this.$H.get('/post/'+this.info.id).then(({detail})=>{
+					this.info.content = detail.content
+					this.info.title = detail.title
+					this.images = detail.images
+					this.info.titlepic = detail.titlepic
+					this.info.username = detail.user.username
+					this.info.userpic = detail.user.userpic
+					this.info.newstime = detail.create_time
+					this.info.share_num = detail.sharenum
 					this.show = true
 					uni.hideLoading()
+					console.log(detail);
 				})
+
 				
 				
 			},
@@ -118,47 +158,35 @@
 			
 				this.item.isFollow = !this.item.isFollow
 			},
-			previewImage(e){
+			previewImage(index){
 				
 				uni.previewImage({
-					current: 0,
-					urls: [this.item.titlepic]
+					current: index,
+					urls: this.imagesList
 				})
-			},
-			getInfo(){
-				return new Promise((resolve,reject)=>{
-					setTimeout(()=>{
-					  const	item = {
-									username: "用户昵称",
-									userpic: "/static/demo/userpic/6.jpg",
-									newstime: "2019-10-20 下午04:30",
-									isFollow: false,
-									title: "我是标题++++++++df6sd4f,胜多负少的佛挡杀佛海慧寺的还没收到发送到faaowjfojg,收到f,水电费欧舒丹粉丝打飞机",
-									titlepic: "/static/demo/banner1.jpg",
-									support: {
-									type: "", // 未操作
-									support_count: 1,
-									unsupport_count: 2,
-									},
-									comment_count: 2,
-									share_num: 2,
-								}
-								resolve(item)
-							},100)
-				})
-	
 			}
 		},
 		onLoad(e) {
-			uni.showLoading({
-			
+			if( !e.info) {
+					uni.setNavigationBarTitle({
+				title:"找不到了"
 			})
-			const {titlepic,title,username} = JSON.parse(e.info)
+			uni.showToast({
+				title:"找不到该帖子...",
+				icon:"none"
+			})
+			return
+			}
+		
+			uni.showLoading({
+				
+			})
+			const {id,title} = JSON.parse(e.info)
 			uni.setNavigationBarTitle({
 				title:title
 			})
+			this.info.id = id
 			this.init()
-			
 		},
 		onBackPress() {
 			if(this.$refs.popupShare.showPopup){

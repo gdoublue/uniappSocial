@@ -23,7 +23,7 @@
 				<scroll-view scroll-y="true" 
 				:style="'height:' + scrollH + 'px;'">
 				<!-- 热门分类 -->
-					<hotTopicsClass></hotTopicsClass>
+					<hotTopicsClass :hotTopics="hotCate"></hotTopicsClass>
 					<!-- 搜索框 -->
 					<view class="p-2" @click="tosearchTopic">
 						<view class="bg-light rounded flex align-center justify-center py-2 text-secondary">
@@ -34,14 +34,8 @@
 				
 					<!-- 轮播图 -->
 					<swiper class="px-2 pb-2" :indicator-dots="true" :autoplay="true" circular=true :interval="3000" :duration="1000">
-						<swiper-item>
-							<image src="/static/demo/datapic/27.jpg" style="height: 300rpx;" class="w-100 rounded"></image>
-						</swiper-item>
-						<swiper-item>
-							<image src="/static/demo/datapic/18.jpg" style="height: 300rpx;" class="w-100 rounded"></image>
-						</swiper-item>
-						<swiper-item>
-							<image src="/static/demo/datapic/33.jpg" style="height: 300rpx;" class="w-100 rounded"></image>
+						<swiper-item :key="index" v-for="(item,index) in swiperList">
+							<image  :src="item.src" style="height: 300rpx;" class="w-100 rounded"></image>
 						</swiper-item>
 					</swiper>
 					<Divider></Divider>
@@ -76,81 +70,9 @@
 				tabIndex: 0,
 				scrollH: 600,
 				follwNewsList: [],
-				topicList: 	[
-						{
-						cover: "/static/demo/topicpic/2.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 12,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/1.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/3.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/4.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/5.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/6.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					},{
-						cover: "/static/demo/topicpic/7.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/8.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/9.jpeg",
-						title: "话题名称",
-						desc: "电视接收机",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/10.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 0,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/11.jpeg",
-						title: "话题名称",
-						desc: "话题描述",
-						today_count: 4,
-						news_count: 10
-					}, {
-						cover: "/static/demo/topicpic/12.jpeg",
-						title: "话题名称",
-						desc: "收水电费水电费",
-						today_count: 3,
-						news_count: 999
-					}
-				]
+				swiperList:[],
+				topicList: 	[],
+				hotCate:[]
 			}
 		},
 		onLoad() {
@@ -159,11 +81,47 @@
 					this.scrollH = res.windowHeight - res.statusBarHeight - 44
 				},
 			});
-			this.getData();
+		
+			this.getHotTopic()
+			this.getSwipers()
+			this.getTopicNav()
 		},
 		methods: {
+					// 获取轮播图
+						getSwipers(){
+							this.$H.get('adsense/0').then(res=>{
+								this.swiperList = res.list
+							}).catch(
+							this.swiperList = [{src:"/static/demo/banner2.jpg"}]
+							)
+						},
+				// 获取热门话题
+						getHotTopic(){
+							this.$H.get('/hottopic').then(res=>{
+								this.topicList = res.list.map(item=>{
+									return {
+										id:item.id,
+										cover:item.titlepic,
+										title:item.title,
+										desc:item.desc,
+										today_count:item.todaypost_count,
+										news_count:item.post_count
+									}
+								})
+							})
+						},
+						// 获取热门分类
+									getTopicNav(){
+										this.$H.get('/topicclass').then(res=>{
+											this.hotCate = res.list.map(item=>{
+												return {
+													id:item.id,
+													name:item.classname
+												}
+											})
+										})
+									},
 			tosearchTopic(){
-				console.log('totopic');
 				uni.navigateTo({
 					url:'../searchTopic/searchTopic'
 				})
@@ -184,9 +142,7 @@
 			onChangeTab(e) {
 				this.changeTab(e.detail.current);
 			},
-			getData() {
-				this.follwNewsList = list
-			},
+
 			doSupport({
 				type,
 				index

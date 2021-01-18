@@ -2,6 +2,8 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+				// 网络监听
+		this.$U.onNetWork()
 		},
 		onShow: function() {
 			console.log('App Show')
