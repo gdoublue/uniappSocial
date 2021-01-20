@@ -28,13 +28,19 @@ export default {
 						return rej(result.data)
 					}
 					// 成功
-					res(result.data.data)
+					if(result.data.data){
+						res(result.data.data)
+					}else{
+						res(result.data.msg)
+					}
+					
 				},
 				fail:(error)=>{
-					uni.showToast({
-						title: error.errMsg || '请求失败',
-						icon: 'none'
-					});
+					console.log(error);
+					// uni.showToast({
+					// 	title: error.errMsg || '请求失败',
+					// 	icon: 'none'
+					// });
 					return rej()
 				}
 			});

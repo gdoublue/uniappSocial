@@ -129,7 +129,6 @@
 					this.info.share_num = detail.sharenum
 					this.show = true
 					uni.hideLoading()
-					console.log(detail);
 				})
 
 				

@@ -32,13 +32,13 @@
 						</view>
 					</view>
 				
-					<!-- 轮播图 -->
-					<swiper class="px-2 pb-2" :indicator-dots="true" :autoplay="true" circular=true :interval="3000" :duration="1000">
+					<!-- 广告轮播图 -->
+					<swiper v-if="swiperList.length" class="px-2 pb-2" :indicator-dots="true" :autoplay="true" circular=true :interval="3000" :duration="1000">
 						<swiper-item :key="index" v-for="(item,index) in swiperList">
 							<image  :src="item.src" style="height: 300rpx;" class="w-100 rounded"></image>
 						</swiper-item>
 					</swiper>
-					<Divider></Divider>
+				
 					<view class="font-md p-2">最近更新</view>
 					<template v-for="(item,index) in topicList">
 						<topicList :item='item' :key="index"></topicList>
@@ -92,7 +92,7 @@
 							this.$H.get('adsense/0').then(res=>{
 								this.swiperList = res.list
 							}).catch(
-							this.swiperList = [{src:"/static/demo/banner2.jpg"}]
+							
 							)
 						},
 				// 获取热门话题

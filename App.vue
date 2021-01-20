@@ -4,6 +4,7 @@
 			console.log('App Launch')
 				// 网络监听
 		this.$U.onNetWork()
+		this.$store.commit('initUser')
 		},
 		onShow: function() {
 			console.log('App Show')

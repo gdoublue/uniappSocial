@@ -25,7 +25,7 @@
 				
 			</view>
 			<view class="font-md my-2" >{{item.title}}</view>
-			<image v-if="item.titlepic" :src="item.titlepic" class="rounded w-100" style="height: 350rpx;" lazy-load=true
+			<image v-if="item.titlepic" :src="item.titlepic" class="rounded w-100" style="height: 500rpx;" lazy-load=true
 			@tap.stop="previewImage" mode="aspectFill"></image>
 			
 			<!-- 点赞 评论 ... -->

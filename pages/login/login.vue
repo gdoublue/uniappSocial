@@ -35,7 +35,7 @@
 				<view class="py-2 px-3">
 					<button class="text-white" style="border-radius: 50rpx;border: 0;"
 					 :class="disabled?'bg-main-disabled':'bg-main'"
-					 type="primary" :disabled="disabled">登录</button>
+					 type="primary" :disabled="disabled" @click="submit">{{loading ? '登录中...' : '登录'}}</button>
 				</view>
 				
 				<view class="flex align-center justify-center pt-2 pb-4">
@@ -68,10 +68,49 @@
 				code:'',
 				phone:'',
 				countdown:0,
-				
+				loading:false
 			}
 		},
 		methods: {
+			submit(){
+				if(this.disabled) return;
+				this.loading = !this.loading
+								let url = ""
+								let data = ""
+					if(this.status){
+									// 手机验证码登录
+									url = '/user/phonelogin'
+									data = {
+										phone:this.phone,
+										code:this.code
+									}
+								} else {
+									// 账号密码登录
+									url = '/user/login'
+									data = {
+										username:this.username,
+										password:this.password
+									}
+								}	
+									
+						this.$H.post(url,data).then(res=>{
+								this.loading = false
+								console.log(res);
+								// 修改vuex的state,持久化存储
+								this.$store.commit('login',res)
+								// 提示和跳转
+								uni.navigateBack({
+									delta: 1
+								}); 
+								uni.showToast({
+									title: '登录成功',
+									icon: 'none'
+								});
+							}).catch(err=>{
+								// 登录失败
+								this.loading = false
+							})		
+			},
 			back(){
 				uni.navigateBack()
 			},
@@ -96,15 +135,24 @@
 					})
 					return
 				}
-				console.log('发送验证码');
-				this.countdown = 30
-			 let  count =  setInterval(()=>{
-					if(this.countdown>=1){
-						this.countdown --
-					}else{
-						clearInterval(count)
-					}
-				},1000)
+					this.$H.post('/user/sendcode',{
+									phone:this.phone
+								}).then(res=>{
+										console.log(res);
+										uni.showToast({
+															title: res,
+															icon: 'none'
+														});
+									this.countdown = 30
+									let  count =  setInterval(()=>{
+														if(this.countdown>=1){
+															this.countdown --
+														}else{
+															clearInterval(count)
+														}
+													},1000)
+								})
+			
 			}
 		},
 		computed:{
