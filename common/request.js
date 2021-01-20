@@ -1,4 +1,5 @@
 import $C from '@/common/config.js';
+import $store from '@/store/index.js';
 export default {
 	common:{
 		method: 'GET',
@@ -12,9 +13,14 @@ export default {
 		options.url = $C.webUrl + options.url
 		options.method = options.method || this.common.method
 		options.header = options.header || this.common.header
-		
 		// 验证权限token
-		
+				if(options.token){
+					options.header.token = $store.state.user.token
+					if(!options.header.token){
+						return Promise.reject('请重新登陆再试!')
+						
+					}
+				}
 		return new Promise((res,rej)=>{
 			uni.request({
 				...options,
@@ -37,10 +43,10 @@ export default {
 				},
 				fail:(error)=>{
 					console.log(error);
-					// uni.showToast({
-					// 	title: error.errMsg || '请求失败',
-					// 	icon: 'none'
-					// });
+					uni.showToast({
+						title: error.errMsg || '请求失败',
+						icon: 'none'
+					});
 					return rej()
 				}
 			});

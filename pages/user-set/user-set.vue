@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<template v-if="loginStatus">
-			<uni-list-item title="账号与安全" link="navigateTo" to="../user-pwd/user-pwd"></uni-list-item>
+			<uni-list-item title="账号与安全" link="navigateTo" to="../user-safe/user-safe"></uni-list-item>
 			<uni-list-item title="资料编辑" link="navigateTo" to="../user-info/user-info"></uni-list-item>
 		</template>
 

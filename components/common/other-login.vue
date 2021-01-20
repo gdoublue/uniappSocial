@@ -64,12 +64,15 @@
 						this.$store.commit('login', this.$U.formatUserinfo(res))
 						// 返回上一页
 					uni.reLaunch({
-						url:"../../pages/user/user"
+						url:"../../pages/user/user",
+						success:()=>{
+							uni.showToast({
+								title: '登录成功',
+								icon: 'none'
+							});
+						}
 					});
-						uni.showToast({
-							title: '登录成功',
-							icon: 'none'
-						});
+						
 					})
 			}
 		},

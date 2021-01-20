@@ -87,6 +87,9 @@
 										return this.user.userpic ? this.user.userpic : '/static/default.jpg'
 									}
 		},
+		onShow() {
+			
+		},
 		onNavigationBarButtonTap() {
 			uni.navigateTo({
 				url:'../user-set/user-set'

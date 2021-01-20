@@ -306,7 +306,7 @@
             "path" : "pages/user-pwd/user-pwd",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "账号与安全",
+                "navigationBarTitleText": "修改密码",
                 "enablePullDownRefresh": false
             }
             
@@ -366,6 +366,33 @@
 						}]
 					}
 				}
+            }
+            
+        }
+        ,{
+            "path" : "pages/user-safe/user-safe",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "账号与安全",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user-phone/user-phone",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "绑定手机",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user-email/user-email",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "绑定邮箱.",
+                "enablePullDownRefresh": false
             }
             
         }
