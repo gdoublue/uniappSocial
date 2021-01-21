@@ -37,6 +37,7 @@
 				}, {
 					token: true
 				}).then(res => {
+					console.log(res);
 					this.$store.commit('editUserInfo', {
 						key: 'phone',
 						value: this.phone

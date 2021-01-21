@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<uni-list-item title="头像" showArrow clickable  @click="changeUserpic">
-			<image :src="userpic" slot="footer" style="width: 100rpx;height: 100rpx;" class="rounded-circle"></image>
+			<image :src="user.userpic ? user.userpic : '/static/default.jpg'" slot="footer" style="width: 100rpx;height: 100rpx;" class="rounded-circle"></image>
 		</uni-list-item>
 		<uni-list-item title="昵称">
 			<view class="flex align-center" slot="footer">
@@ -51,6 +51,7 @@
 
 <script>
 	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue';
+	import { mapState } from 'vuex'
 	const sexArray = ['保密', '男', '女']
 	const emotionArray = ['保密', '未婚', '已婚']
 	export default {
@@ -58,7 +59,6 @@
 		data() {
 			return {
 				themeColor: '#007AFF',
-				userpic: "/static/default.jpg",
 				username: "昵称",
 				sex: 0,
 				emotion: 0,
@@ -70,6 +70,9 @@
 			}
 		},
 		computed: {
+				...mapState({
+							user:state=>state.user
+						}),
 			sexText() {
 				return sexArray[this.sex]
 			},
@@ -115,7 +118,26 @@
 					sizeType: ["compressed"],
 					sourceType: ["album", "camera"],
 					success: (res) => {
-						this.userpic = res.tempFilePaths[0]
+						let pic = res.tempFilePaths[0];
+						this.$H.upload('/edituserpic',{
+													filePath: res.tempFilePaths[0],
+													name: 'userpic',
+													token:true
+												}).then(result=>{
+													this.$store.commit('editUserInfo',{
+														key:"userpic",
+														value:result.data
+													})
+													uni.showToast({
+														title: '修改头像成功',
+														icon: 'none'
+													});
+												}).catch(err=>{
+													uni.showToast({
+														title: err,
+														icon: 'none'
+													});
+												})
 					}
 				})
 			},
