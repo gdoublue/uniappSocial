@@ -36,6 +36,7 @@ export default new Vuex.Store({
 			value
 		}) {
 			state.user[key] = value
+			uni.setStorageSync('user', JSON.stringify(state.user));
 		}
 
 	}

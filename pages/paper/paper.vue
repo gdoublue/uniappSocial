@@ -81,10 +81,10 @@
 					this.scrollH = res.windowHeight - res.statusBarHeight - 44
 				},
 			});
-		
+			this.getTopicNav()
 			this.getHotTopic()
 			this.getSwipers()
-			this.getTopicNav()
+			
 		},
 		methods: {
 					// 获取轮播图

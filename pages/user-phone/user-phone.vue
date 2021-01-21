@@ -71,7 +71,7 @@
 				}).then(res => {
 					console.log(res);
 					uni.showToast({
-						title: res,
+						title: res.msg,
 						icon: 'none'
 					});
 					this.countdown = 30

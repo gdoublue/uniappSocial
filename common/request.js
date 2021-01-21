@@ -37,7 +37,7 @@ export default {
 					if(result.data.data){
 						res(result.data.data)
 					}else{
-						res(result.data.msg)
+						res(result.data)
 					}
 					
 				},
