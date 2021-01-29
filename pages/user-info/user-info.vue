@@ -43,7 +43,9 @@
 				<text class="iconfont icon-bianji1 ml-2"></text>
 			</view>
 		</uni-list-item>
-		
+			<view class="py-2 px-3">
+					<button class="bg-main text-white" style="border-radius: 50rpx;border: 0;" type="primary" @click="submit">完成</button>
+				</view>
 		<mpvue-city-picker :themeColor="themeColor" ref="mpvueCityPicker" 
 		:pickerValueDefault="cityPickerValueDefault" @onConfirm="onConfirm"></mpvue-city-picker>
 	</view>
@@ -80,7 +82,45 @@
 				return emotionArray[this.emotion]
 			}
 		},
+		onLoad() {
+					let userinfo = this.user.userinfo
+					if(userinfo){
+						this.cityText = userinfo.path
+						this.username = this.user.username
+						this.sex =  userinfo.sex
+						this.emotion = userinfo.qg
+						this.job  = userinfo.job
+						this.birthday  = userinfo.birthday
+					}
+				},
 		methods: {
+			submit(){
+				let obj = {
+									name:this.username,
+									sex:this.sex,
+									qg:this.emotion,
+									job:this.job,
+									birthday:this.birthday,
+									path:this.cityText
+								}
+		this.$H.post('/edituserinfo',obj,{
+					token:true
+				}).then(res=>{
+					this.$store.commit('editUserInfo',{
+						key:"username",
+						value:this.username
+					})
+					this.$store.commit('editUserUserInfo',obj)
+					uni.navigateBack({
+						delta: 1
+					});
+					uni.showToast({
+						title: '修改资料成功',
+						icon: 'none'
+					});
+				})			
+								
+			},
 	// 城市三级联动提交事件
 			onConfirm(e) {
 				this.cityText = e.label
@@ -151,7 +191,7 @@
 			},
 			// 修改职业
 			changeJob() {
-				let JobArray = ['IT', '教师', '农名']
+				let JobArray = ['餐饮', '工业', '教育','文化','互联网','销售','新媒体','医疗卫生','建筑','金融保险','农业','交通运输','邮电通信','其他']
 				uni.showActionSheet({
 					itemList: JobArray,
 					success: (res) => {

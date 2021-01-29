@@ -6,7 +6,7 @@
 						<image :src="avatar" class="rounded mr-2" style="width: 100rpx;height: 100rpx;"></image>
 						<view class="flex-1 flex-column flex">
 							<text class="font-lg font-weight-bold text-dark">{{user.username}}</text>
-							<text class="text-muted font" >总帖子 00 今日发帖 00</text>
+							<text class="text-muted font" >总帖子 {{myData[0].num}}  今日发帖 {{myData[1].num}} </text>
 						</view>
 						<text class="iconfont icon-jinru font-lg"></text>
 					</view>
@@ -57,17 +57,19 @@
 			return {
 					myData:[{
 									name:"帖子",
-									num:1
+									num:0
 								},{
 									name:"动态",
-									num:1
+									num:0
 								},{
 									name:"评论",
-									num:2
+									num:0
 								},{
 									name:"粉丝",
 									num:0
-								}]
+								}],
+								user:'',
+								
 			}
 		},
 		methods: {
@@ -75,20 +77,33 @@
 				uni.navigateTo({
 									url: '../login/login',
 								});
-			}
+			},
+			getCounts(){
+							this.$H.get('/user/getcounts/'+this.user.id,{},{
+								token:true
+							}).then(res=>{
+								this.myData[0].num = res.post_count
+								this.myData[1].num = res.today_posts_count
+								this.myData[2].num = res.comments_count
+								this.myData[3].num = res.withfen_count
+							})
+						}		
 		},
 		computed:{
 			...mapState({
 							loginStatus:state=>state.loginStatus,
-							user:state=>state.user
+							Xuser:state=>state.user
 						}),
 							// 用户头像
 									avatar(){
 										return this.user.userpic ? this.user.userpic : '/static/default.jpg'
 									}
 		},
+		onLoad() {
+				this.user = this.Xuser
+		},
 		onShow() {
-			
+			this.getCounts()
 		},
 		onNavigationBarButtonTap() {
 			uni.navigateTo({

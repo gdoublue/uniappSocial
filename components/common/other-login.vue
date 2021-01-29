@@ -63,7 +63,7 @@
 						// 修改vuex的state,持久化存储
 						this.$store.commit('login', this.$U.formatUserinfo(res))
 						// 返回上一页
-					uni.reLaunch({
+					uni.redirectTo({
 						url:"../../pages/user/user",
 						success:()=>{
 							uni.showToast({

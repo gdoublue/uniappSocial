@@ -37,7 +37,18 @@ export default new Vuex.Store({
 		}) {
 			state.user[key] = value
 			uni.setStorageSync('user', JSON.stringify(state.user));
-		}
+		},
+				// 修改资料
+				editUserUserInfo(state,obj){
+					if(state.user.userinfo){
+						state.user.userinfo.sex = obj.sex
+						state.user.userinfo.qg = obj.qg
+						state.user.userinfo.job = obj.job
+						state.user.userinfo.path = obj.path
+						state.user.userinfo.birthday = obj.birthday
+						uni.setStorageSync('user', JSON.stringify(state.user));
+					}
+				}
 
 	}
 })
