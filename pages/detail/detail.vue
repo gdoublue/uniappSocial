@@ -80,7 +80,7 @@
 									title:"",
 									titlepic:"",
 									support:{
-										type:"support", // 顶
+										type:"", // 顶
 										support_count:0,
 										unsupport_count:0
 									},
@@ -118,7 +118,8 @@
 			
 			init(){
 		// 请求api
-				this.$H.get('/post/'+this.info.id).then(({detail})=>{
+				this.$H.get('/post/'+this.info.id,{},{token:true,
+					noCheck:true}).then(({detail})=>{
 					this.info.content = detail.content
 					this.info.title = detail.title
 					this.images = detail.images
@@ -167,24 +168,29 @@
 		},
 		onLoad(e) {
 			if( !e.info) {
-					uni.setNavigationBarTitle({
-				title:"找不到了"
-			})
-			uni.showToast({
-				title:"找不到该帖子...",
-				icon:"none"
-			})
-			return
+						uni.setNavigationBarTitle({
+					title:"找不到了"
+				})
+				uni.showToast({
+					title:"找不到该帖子...",
+					icon:"none"
+				})
+				return
 			}
 		
 			uni.showLoading({
 				
 			})
-			const {id,title} = JSON.parse(e.info)
+			const {item} = JSON.parse(e.info)
+			console.log(item);
 			uni.setNavigationBarTitle({
-				title:title
+				title:item.title
 			})
-			this.info.id = id
+			this.info.id = item.id
+			this.info.support = item.support
+			this.info.isFollow = item.isFollow
+			this.info.comment_count = item.comment_count
+			
 			this.init()
 		},
 		onBackPress() {

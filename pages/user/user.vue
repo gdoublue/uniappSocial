@@ -5,7 +5,7 @@
 					<view class="flex align-center p-2">
 						<image :src="avatar" class="rounded mr-2" style="width: 100rpx;height: 100rpx;"></image>
 						<view class="flex-1 flex-column flex">
-							<text class="font-lg font-weight-bold text-dark">{{user.username}}</text>
+							<text class="font-lg font-weight-bold text-dark">{{user.username || ' '}}</text>
 							<text class="text-muted font" >总帖子 {{myData[0].num}}  今日发帖 {{myData[1].num}} </text>
 						</view>
 						<text class="iconfont icon-jinru font-lg"></text>
@@ -56,7 +56,7 @@
 		data() {
 			return {
 					myData:[{
-									name:"帖子",
+								name:"帖子",
 									num:0
 								},{
 									name:"动态",
@@ -79,6 +79,7 @@
 								});
 			},
 			getCounts(){
+				if( !this.user) return;
 							this.$H.get('/user/getcounts/'+this.user.id,{},{
 								token:true
 							}).then(res=>{
@@ -96,7 +97,7 @@
 						}),
 							// 用户头像
 									avatar(){
-										return this.user.userpic ? this.user.userpic : '/static/default.jpg'
+										return this.user.userpic ? this.user.userpic :'/static/default.jpg'
 									}
 		},
 		onLoad() {
@@ -104,6 +105,7 @@
 		},
 		onShow() {
 			this.getCounts()
+			
 		},
 		onNavigationBarButtonTap() {
 			uni.navigateTo({

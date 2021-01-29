@@ -98,9 +98,9 @@
 								// 修改vuex的state,持久化存储
 								this.$store.commit('login',res)
 								// 提示和跳转
-								uni.redirectTo({
-									url:"../user/user"
-								}); 
+							uni.reLaunch({
+								url:"../user/user"
+							}) ;
 								uni.showToast({
 									title: '登录成功',
 									icon: 'none'

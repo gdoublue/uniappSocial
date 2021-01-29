@@ -86,9 +86,36 @@ export default {
         this.scrollH = res.windowHeight - uni.upx2px(101);
       },
     });
-    this.getData(); 	
+    this.getData(); 
+					// 监听关注和顶踩操作
+					uni.$on('updateFollowOrSupport',(e)=>{
+						console.log('接收到了');
+						switch (e.type){
+							case 'follow': // 关注
+							this.follow(e.data.user_id)
+								break;
+							case 'support': // 顶踩
+							this.doSupport(e.data)
+								break;
+						}
+					})
   },
+  	onUnload() {
+  			uni.$off('updateFollowOrSupport',(e)=>{})
+  		},
   methods: {
+	  			// 关注
+	  			follow(user_id){
+	  				// 找到当前作者的所有列表
+	  				this.newsList.forEach(tab=>{
+	  					tab.list.forEach((item)=>{
+	  						if(item.user_id === user_id){
+	  							item.isFollow = true
+	  						}
+	  					})
+	  				})
+	  				uni.showToast({ title: '关注成功' })
+	  			},
 	// 获取数据
 			getData(){
 				// 获取分类
@@ -133,7 +160,10 @@ export default {
 						let id = this.tabBars[index].id
 						let page = this.newsList[index].page
 						let isrefresh = page === 1
-						this.$H.get('/postclass/'+id+'/post/'+page)
+						this.$H.get('/postclass/'+id+'/post/'+page,{},{
+					token:true,
+					noCheck:true
+				})
 						.then(res=>{
 							let list = res.list.map(v=>{
 								return this.$U.formatCommonList(v)

@@ -16,7 +16,7 @@ export default {
 		// 验证权限token
 				if(options.token){
 					options.header.token = $store.state.user.token
-					if(!options.header.token){
+					if(!options.noCheck && !options.header.token){
 						return Promise.reject('请重新登陆再试!')
 						
 					}

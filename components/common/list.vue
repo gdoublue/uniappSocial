@@ -19,7 +19,7 @@
 					 hover-class="animate__tada">关注</view>
 					 <view style="width: 90rpx; height: 50rpx; background-color: rgba(5,5,5,0.2); "  v-else
 					 class="flex align-center justify-center rounded text-white animate__animated " 
-					 @click.stop="clickFollow"
+					 @click.stop="clickFollow(false)"
 					 hover-class="animate__tada">已关注</view>
 					
 				
@@ -77,7 +77,7 @@
 			},
 			openDetail(){
 				uni.navigateTo({
-					url:'../../pages/detail/detail?info='+JSON.stringify({id:this.item.id ,title:this.item.title})
+					url:'../../pages/detail/detail?info='+JSON.stringify({item:this.item})
 				})
 			},
 			doSupport(type){
@@ -86,10 +86,25 @@
 					index:this.index
 				})
 			},
-			clickFollow(){
-				this.$emit('clickFollow',{
-					index:this.index
-				})
+			clickFollow(e = true){
+				if(e){
+					this.checkAuth(()=>{
+									this.$H.post('/follow',{
+										follow_id:this.item.user_id
+									},{
+										token:true
+									}).then(res=>{
+										// 通知更新
+										uni.$emit('updateFollowOrSupport',{
+											type:"follow",
+											data:{
+												user_id:this.item.user_id
+											}
+										})
+									})
+								})
+				}
+							
 			},
 			previewImage(e){
 				

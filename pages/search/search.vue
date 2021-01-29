@@ -53,6 +53,12 @@
 				this.searchEvent()
 			}
 		},
+		  onPullDownRefresh() {
+		        console.log('refresh');
+		        setTimeout(function () {
+		            uni.stopPullDownRefresh();
+		        }, 1000);
+		    },
 		onNavigationBarSearchInputConfirmed(e) {
 			this.searchEvent()
 		},
@@ -125,6 +131,7 @@
 					page:this.page
 				}).then(res=>{
 					// 整理格式
+					console.log(res);
 					let list = res.list.map(v=>{
 						return this.$U.formatCommonList(v)
 					})
